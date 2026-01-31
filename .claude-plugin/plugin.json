@@ -1,0 +1,8 @@
+{
+  "name": "diagnostic-playground",
+  "version": "1.0.0",
+  "description": "Generates interactive HTML dashboards using real Supabase data to debug app issues. Testers interact with the dashboard, flag problems, and copy structured feedback back to Claude for action.",
+  "author": {
+    "name": "algohussle"
+  }
+}
