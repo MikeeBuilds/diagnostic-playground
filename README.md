@@ -48,9 +48,31 @@ Then describe what you want to diagnose:
 
 | Template | Purpose | What it checks |
 |----------|---------|----------------|
-| `entity-flow-debugger` | Primary user action pipeline | Entity creation, side-effects (points/credits), media uploads, volume trends |
+| `entity-flow-debugger` | Primary user action pipeline | **Visual flow diagram** + data table. Shows entity creation, side-effects (points/credits), media uploads, volume trends. Flow diagram annotated with real counts at each step. |
 | `user-funnel` | Signup → first action conversion | User profiles, cohorts, time-to-first-action, drop-off points |
 | `data-integrity-checker` | Cross-table consistency | Denormalized count drift, balance drift, status conflicts, orphaned records |
+
+## Flow Diagram Feature
+
+The `entity-flow-debugger` template includes an **interactive SVG flow diagram** that visualizes the entire pipeline:
+
+```
+┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐
+│ Auth   │──▶│ Validate│──▶│ Submit │──▶│ Success│
+│ 323    │   │ 310    │   │ 298    │   │ 277    │
+└────┬───┘   └────┬───┘   └────┬───┘   └────────┘
+     │            │            │
+     ▼            ▼            ▼
+  ┌─────┐     ┌─────┐     ┌─────┐
+  │ 13  │     │ 12  │     │ 21  │
+  │fail │     │fail │     │fail │
+  └─────┘     └─────┘     └─────┘
+```
+
+- **Real counts on every node** — see exactly how many users reached each step
+- **Failure paths** — red lines show where users dropped off and why
+- **Click any step** — view details and flag issues directly from the diagram
+- **Tab between views** — switch between Flow Diagram and Data Table
 
 ## Requirements
 
@@ -94,7 +116,8 @@ diagnostic-playground/
         └── references/
             ├── supabase-queries.md
             ├── feedback-schema.md
-            └── dashboard-theme.md
+            ├── dashboard-theme.md
+            └── flow-diagram.md
 ```
 
 ## Design

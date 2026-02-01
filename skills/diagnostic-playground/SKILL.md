@@ -35,6 +35,28 @@ Before anything else:
    - **Categories/items table** → reference data (e.g., `products`, `categories`, `tags`)
    - **Locations/targets table** → what the content relates to (e.g., `locations`, `projects`, `channels`)
 
+### Step 0.5: Discover the pipeline (for entity-flow-debugger)
+
+If using the `entity-flow-debugger` template, also discover the action pipeline:
+
+1. **Find the main action entry point** — Read the code to find the function that handles entity creation (e.g., `submitReport()`, `createOrder()`, `handleSubmit()`)
+2. **Trace the sequential steps** — Identify the order of operations:
+   - Auth checks (is user signed in?)
+   - Validation (is input valid?)
+   - Permission checks (geofencing, rate limits, access control)
+   - Database writes (INSERT/UPDATE)
+   - Side-effects (XP awards, notifications, cache invalidation)
+   - Success confirmation
+3. **Classify each step**:
+   - `action` — User-initiated action (tap, select, submit)
+   - `decision` — Validation or guard check that can fail
+   - `success` — Completion state
+   - `failure` — Error state
+4. **Note failure conditions** — What error message shows at each decision point?
+5. **Query for pipeline counts** — If analytics exist (PostHog, Amplitude), query for funnel counts. Otherwise estimate from database (e.g., users with 0 entities = failed before creation)
+
+This becomes `DATA.pipeline` in the generated dashboard, enabling the visual flow diagram with real data annotations.
+
 ### Step 1: Pick a template
 
 Read the appropriate template file for the diagnostic type:
@@ -59,7 +81,8 @@ Read the appropriate template file for the diagnostic type:
 
 1. Read `references/dashboard-theme.md` for the CSS foundation
 2. Read `references/feedback-schema.md` for the feedback panel structure
-3. Follow the template's **Layout** and **Interactive Features** sections
+3. Read `references/flow-diagram.md` for SVG flow diagram patterns (if using entity-flow-debugger)
+4. Follow the template's **Layout** and **Interactive Features** sections
 4. Embed query results as JavaScript constants:
 
 ```html
@@ -99,6 +122,7 @@ When the tester pastes back structured feedback:
 - **Copy Feedback button** — copies structured text to clipboard with "Copied!" confirmation
 - **Timestamp** — show when the data was queried (so testers know freshness)
 - **Dark theme** — uses the Brutalist dark theme from references/dashboard-theme.md
+- **Flow diagram (entity-flow-debugger)** — SVG pipeline visualization with real data annotations on each step
 
 ## Data embedding pattern
 
